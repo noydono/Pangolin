@@ -1,0 +1,26 @@
+<div class="container">
+  <mat-card class="card">
+    <mat-card-title>
+      Les Pangolins disponibles
+    </mat-card-title>
+    <mat-card-content class="card-body-friend">
+      <ng-container *ngFor="let item of pangolins">
+        <mat-card *ngIf="myProfile._id != item._id" class="card"  [style]="background(item.famille)"
+          style="max-width: 18rem;">
+          <mat-card-title class="card-title">
+            <h4> {{item.username}}</h4>
+          </mat-card-title>
+          <mat-card-content>
+            <p class="card-text">
+              je suis un pangolin {{item.race}}, j'aime bien les {{item.food}}
+            </p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="addFriend(item)">L'Ajouter</button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+
+    </mat-card-content>
+  </mat-card>
+</div>
