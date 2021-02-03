@@ -8,7 +8,7 @@
       <a mat-list-item  class="nav-link" [routerLink]="['/home']"   routerLinkActive="active">Home</a>          
       <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/profile']"   routerLinkActive="active">Profile</a>          
       <a mat-list-item *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']" routerLinkActive="active" >S'inscrire</a>
-      <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/friend']" routerLinkActive="active" >Amis</a>
+      <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/friend']" routerLinkActive="active" >Pangolins</a>
       <a mat-list-item *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']" routerLinkActive="active"  >Ce connecter</a>
       <button mat-raised-button color="primary" style="margin-left: 1rem;" *ngIf="isLoggedIn"  (click)="logout()" >Ce déconnecter</button>
     </mat-nav-list>

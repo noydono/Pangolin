@@ -15,5 +15,8 @@
   top: 0;
   z-index: 1;
 }
+.nav-link{
+  margin-bottom: 0.5rem;
+}
 
 
