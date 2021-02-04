@@ -75,26 +75,6 @@ pangolinSchema.methods.generateAuthToken = async function () {
     return token;
 };
 
-pangolinSchema.statics.findEmail = async (email) => {
-    let errors = []
-    const pangolin = await Pangolin.findOne({
-        email: email
-    });
-    if (pangolin) {
-        errors.push({
-            email: "L'email existe déjà"
-        });
-        return {
-            hasErrors: true,
-            errors: errors
-        };
-    } else {
-        return {
-            hasErrors: false
-        }
-    }
-
-}
 
 pangolinSchema.statics.findByCredentials = async (email, password) => {
 

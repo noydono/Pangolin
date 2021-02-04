@@ -6,18 +6,16 @@ module.exports = {
 
     register: async (req, res) => {
 
-        const data = req.body;
-        const pangolinEmail = await PangolinModel.findEmail(req.body.email);
 
-        if (pangolinEmail.hasErrors === true) {
-
+        const checkEmail = await PangolinModel.findOne({email:req.body.email});
+        if (checkEmail) {
             res.status(422).json({
-                errors: pangolin.errors
+                errors: [{
+                    email: "L'email existe déjà"
+                }],
             });
-
         } else {
-
-            let pangolin = new PangolinModel(data);
+            let pangolin = new PangolinModel(req.body);
             pangolin.save((err, pangolin_saved) => {
                 /* istanbul ignore if */
                 if (err) {
@@ -62,23 +60,15 @@ module.exports = {
 
     update: async (req, res) => {
 
-        let data = req.body
-
         await PangolinModel.findByIdAndUpdate(
-            req.params.id, data, {
+            req.params.id, req.body, 
+            {
                 new: true,
                 omitUndefined: true,
-                select:  [
-                    "_id",
-                    "isValide",
-                    "username",
-                    "food",
-                    "race",
-                    "famille"
-                ],
+                fields: { "_id":1, "username": 1, }
             },
             (err, pangolin) => {
-                if (err) {
+                if (err) {                    
                     res.status(422).json({
                         errors: [{
                             update: "Pangolin introuvable"

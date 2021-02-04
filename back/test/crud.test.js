@@ -13,6 +13,10 @@ describe("App", () => {
     it("Should exists", () => {
         expect(app).to.be.a("function");
     });
+    it("Env soit en test",(done)=>{
+        expect(app.locals.settings.env).to.be.equal("test")
+        done()
+    })
 });
 
 describe("User registration", () => {
@@ -59,12 +63,13 @@ describe("User registration", () => {
     });
 
     it("retourne 201 si l'utilisateur et persisté", (done) => {
-
+        console.log(new_user);
         chai
             .request(app)
             .post("/api/register")
             .send(new_user)
             .then((res) => {
+                console.log(res.body);
                 expect(res).to.have.status(201);
                 expect(res.body.errors).to.not.exist
                 expect(res.body._id).to.be.exist
@@ -93,14 +98,13 @@ describe("User registration", () => {
             });
     });
 
-    it("retourne 422 si l'email n'existe pas dans la db", (done) => {
+    it("retourne 422 si l'email existe dans la db", (done) => {
         new_user.email = "exist@exist.exi"
         chai
             .request(app)
             .post("/api/register")
             .send(new_user)
             .then((res) => {
-                console.log(res.body);
                 expect(res).to.have.status(422);
                 expect(res.body.errors.length).to.be.equal(1);
                 expect(res.body.errors[0].email).to.be.equal("L'email existe déjà")
@@ -223,7 +227,6 @@ describe("User registration", () => {
 
     it("retourne 422 si la username n'est pas existant", (done) => {
         delete new_user.username
-        console.log(new_user);
         chai
             .request(app)
             .post("/api/register")
@@ -561,17 +564,13 @@ describe("User Update", () => {
         new_user.food = "termites"
         new_user.age = 12
         new_user.famille = "#ff1"
-
         chai
             .request(app)
             .put("/api/update/" + new_user._id)
             .send(new_user)
             .then((res) => {
                 expect(res).to.have.status(200);
-                expect(res.body.race).to.be.equal(new_user.race)
-                expect(res.body.food).to.be.equal(new_user.food)
-                expect(res.body.age).to.be.equal(new_user.age)
-                expect(res.body.famille).to.be.equal(new_user.famille)
+                expect(res.body._id).to.be.equal(`${new_user._id}`)
                 done();
             })
             .catch((err) => {
@@ -1124,6 +1123,7 @@ describe("GetAllUser", () => {
 })
 
 describe("GetByIdAndretournFriend", () => {
+
     let first_user = {
         username: faker.name.firstName(),
         email: faker.internet.email(),
@@ -1245,7 +1245,7 @@ describe("GetByIdAndretournFriend", () => {
             .then((res) => {
                 expect(res).to.have.status(422)
                 expect(res.body.errors.length).to.be.equal(1)
-                expect(res.body.errors[0].getFriend).to.be.equal("l'une ou les deux id ne sont pas correct")
+                expect(res.body.errors[0].getMyFriend).to.be.equal("l'une ou les deux id ne sont pas correct")
                 done()
             }).catch((err) => {
                 console.log(err);
@@ -1263,7 +1263,7 @@ describe("GetByIdAndretournFriend", () => {
             .then((res) => {
                 expect(res).to.have.status(422)
                 expect(res.body.errors.length).to.be.equal(1)
-                expect(res.body.errors[0].getFriend).to.be.equal("l'une ou les deux id ne sont pas correct")
+                expect(res.body.errors[0].getMyFriend).to.be.equal("l'une ou les deux id ne sont pas correct")
                 done()
             }).catch((err) => {
                 console.log(err);
