@@ -1,7 +1,6 @@
 "use strict";
 
 module.exports = (req,res,next) => {
-  
     let hasErrors = false;
     let errors = [];
     
@@ -20,23 +19,28 @@ module.exports = (req,res,next) => {
 
     function ageValidator(age){
       const patternAge = /^[0-9]+$/ ;
-       if (patternAge.test(age) === false) {
+      if(!age){
+        
+      }else if (patternAge.test(age) === false) {
         errors.push({ age: "Age non valide" });
         hasErrors = true;
       }
     };
-
     function raceValidator(race){
       const patternRace = /^([a-zA-Z0-9-_]{3,36})$/;
-       if (!race || patternRace.test(race) === false) {
+      if(!race){
+        
+      }
+      else if (!race || patternRace.test(race) === false) {
         errors.push({ race: "Espece non valide" });
         hasErrors = true;
       }
     };
-
     function foodValidator(food){
       const patternFood = /^([a-zA-Z0-9-_]{4,36})$/;
-      if (patternFood.test(food) === false) {
+      if(!food){
+        
+      }else if (patternFood.test(food) === false) {
         errors.push({ food: "Nourriture non valide" });
         hasErrors = true;
       }
@@ -44,11 +48,17 @@ module.exports = (req,res,next) => {
 
     function familleValidator(famille){
       const patternFamille = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
-       if(patternFamille.test(famille) === false) {
+      if(!famille){
+        
+      }else if(patternFamille.test(famille) === false) {
         errors.push({ famille: "Famille non valide" });
         hasErrors = true;
       }
+      
     };
+    
+    
+   
     
 };
 

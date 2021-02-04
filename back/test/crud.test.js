@@ -578,6 +578,71 @@ describe("User Update", () => {
             });
     });
 
+    it("retourne 200 si seulement un age et envoyer", (done) => {
+
+        new_user.age = "85"
+        chai
+            .request(app)
+            .put("/api/update/" + new_user._id)
+            .send(new_user)
+            .then((res) => {
+                expect(res).to.have.status(200);
+                expect(res.body._id).to.be.equal(`${new_user._id}`)
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+    it("retourne 200 si seulement un race et envoyer", (done) => {
+
+        new_user.race = "cap"
+        chai
+            .request(app)
+            .put("/api/update/" + new_user._id)
+            .send(new_user)
+            .then((res) => {
+                expect(res).to.have.status(200);
+                expect(res.body._id).to.be.equal(`${new_user._id}`)
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+    it("retourne 200 si seulement un food et envoyer", (done) => {
+
+        new_user.food = "fourmis"
+        chai
+            .request(app)
+            .put("/api/update/" + new_user._id)
+            .send(new_user)
+            .then((res) => {
+                expect(res).to.have.status(200);
+                expect(res.body._id).to.be.equal(`${new_user._id}`)
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+    it("retourne 200 si seulement un famille et envoyer", (done) => {
+
+        new_user.famille = "#fff"
+        chai
+            .request(app)
+            .put("/api/update/" + new_user._id)
+            .send(new_user)
+            .then((res) => {
+                expect(res).to.have.status(200);
+                expect(res.body._id).to.be.equal(`${new_user._id}`)
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+
     it("retourne 422 si l'utilisater n'est pas trouver", (done) => {
         new_user.race = "cap"
         new_user.food = "termites"
