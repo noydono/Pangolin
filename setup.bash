@@ -1,4 +1,4 @@
-echo ***************** Setup Project *******************
+echo Setup Project 
 cd front
 npm install
 ng add @angular/material
