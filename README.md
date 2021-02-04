@@ -7,7 +7,6 @@ exécuté setup.bash
 dans le dossier où il se trouve
 ### l'installation d'angular material
 Selection le theme que vous voulez  et dit oui à la typo et animation =) 
-### Ne pas executer init.bash c'est pas dangereux il me semble, mais on sait jamais xD
 ```
 bash setup.bash
 
