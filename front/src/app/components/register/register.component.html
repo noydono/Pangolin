@@ -5,29 +5,23 @@
     <mat-card-subtitle>Tu veux rencontrer un pangolin chaud de ta région ?</mat-card-subtitle>
     <mat-card-content class="card-body">
       <!-- Username -->
+      
       <mat-form-field appearance="outline">
         <mat-label>Pseudo</mat-label>
-        <mat-error *ngIf="errorUsername">
-          {{errorUsername}}
-        </mat-error>
         <input [(ngModel)]="form.username" type="text" matInput placeholder="PangoDu92" name="username"
           autocomplete="off" required>
       </mat-form-field>
       <!-- Email -->
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <mat-error *ngIf="errorEmail">
-          {{errorEmail}}
-        </mat-error>
+        
         <input [(ngModel)]="form.email" type="email" matInput placeholder="XxpangolinxX@hotmailcom" name="email"
           autocomplete="off" required>
       </mat-form-field>
       <!-- Password -->
       <mat-form-field appearance="outline">
         <mat-label>Mot De Passe</mat-label>
-        <mat-error *ngIf="errorPassword">
-          {{errorPassword}}
-        </mat-error>
+        
         <input 
         [(ngModel)]="form.password" 
         type="password" 
@@ -45,17 +39,13 @@
       <!-- Age -->
       <mat-form-field class="card-input-number" appearance="outline">
         <mat-label>Age</mat-label>
-        <mat-error *ngIf="errorAge">
-          {{errorAge}}
-        </mat-error>
+        
         <input [(ngModel)]="form.age" type="number" matInput placeholder="" name="age" autocomplete="off" required>
       </mat-form-field>
       <!-- Food -->
       <mat-form-field appearance="fill">
         <mat-label>Ta nourriture préférées</mat-label>
-        <mat-error *ngIf="errorFood">
-          {{errorFood}}
-        </mat-error>
+        
         <mat-select [(ngModel)]="form.food" name="food" required>
           <mat-option *ngFor="let food of foods" [value]="food.value">
             {{food.viewValue}}
@@ -65,9 +55,7 @@
       <!-- Race -->
       <mat-form-field appearance="fill">
         <mat-label>Ton espèce</mat-label>
-        <mat-error *ngIf="errorRace">
-          {{errorRace}}
-        </mat-error>
+        
         <mat-select [(ngModel)]="form.race" name="race" required>
           <mat-option *ngFor="let item of races" [value]="item.value">
             {{item.viewValue}}
@@ -77,9 +65,7 @@
       <!-- Color -->
       <mat-form-field class="parent-input-color" appearance="outline">
         <mat-label>Ma Couleur préférées</mat-label>
-        <mat-error *ngIf="errorFamille">
-          {{errorFamille}}
-        </mat-error>
+        
         <input [(ngModel)]="form.famille" type="color" class="input-color" matInput placeholder="Ma Couleur préférées"
           name="famille" autocomplete="off" required>
       </mat-form-field>

@@ -16,41 +16,76 @@ describe("App", () => {
 });
 
 describe("User registration", () => {
-    let new_user = {};
+    let new_user = {
+        username: "toto",
+        email: faker.internet.email(),
+        password: "1zodkengM*",
+        race: "malais",
+        food: "fourmis",
+        age: 1,
+        famille: "#fff",
+        isActive: true
+    };
 
-
+    let new__user_invited = {
+        username: "toto",
+        email: faker.internet.email(),
+    }
     afterEach(function (done) {
-        PangolinModel.findOneAndDelete({
+        PangolinModel.deleteMany({
             username: new_user.username
         }, (err, user) => {
             if (err) {
                 console.log(
                     "LogTest_UserRegistration: " + err);
             } else {
-                new_user = {};
+                new_user = {
+                    username: "toto",
+                    email: faker.internet.email(),
+                    password: "1zodkengM*",
+                    race: "malais",
+                    food: "fourmis",
+                    age: 1,
+                    famille: "#fff",
+                    isActive: true
+                };
+                new__user_invited = {
+                    username: "toto",
+                    email: faker.internet.email(),
+                }
                 done();
             }
         });
     });
 
     it("retourne 201 si l'utilisateur et persisté", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+
         chai
             .request(app)
             .post("/api/register")
             .send(new_user)
             .then((res) => {
+                expect(res).to.have.status(201);
+                expect(res.body.errors).to.not.exist
+                expect(res.body._id).to.be.exist
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+
+    it("retourne 201 si l'utilisateur inviter et persisté", (done) => {
+
+        chai
+            .request(app)
+            .post("/api/register")
+            .send(new__user_invited)
+            .then((res) => {
                 console.log(res.body);
                 expect(res).to.have.status(201);
                 expect(res.body.errors).to.not.exist
+                expect(res.body._id).to.be.exist
                 done();
             })
             .catch((err) => {
@@ -59,20 +94,13 @@ describe("User registration", () => {
     });
 
     it("retourne 422 si l'email n'existe pas dans la db", (done) => {
-        new_user = {
-            username: "toto",
-            email: "exist@exist.exi",
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        new_user.email = "exist@exist.exi"
         chai
             .request(app)
             .post("/api/register")
             .send(new_user)
             .then((res) => {
+                console.log(res.body);
                 expect(res).to.have.status(422);
                 expect(res.body.errors.length).to.be.equal(1);
                 expect(res.body.errors[0].email).to.be.equal("L'email existe déjà")
@@ -84,16 +112,9 @@ describe("User registration", () => {
     })
 
     it("retourne 422 si username n'est pas valide", (done) => {
-        new_user = {
-            username: "a",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
-        chai
+        new_user.username = "a",
+
+            chai
             .request(app)
             .post("/api/register")
             .send(new_user)
@@ -107,16 +128,9 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si email n'est pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            email: "aaaaa",
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
-        chai
+        new_user.email = "aaaaa",
+
+            chai
             .request(app)
             .post("/api/register")
             .send(new_user)
@@ -130,15 +144,8 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si le password n'est pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodk",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };;
+        new_user.password = "1zodk"
+
         chai
             .request(app)
             .post("/api/register")
@@ -153,15 +160,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si age n'est pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: "azea",
-            famille: "#fff"
-        };
+        new_user.age = "azea"
         chai
             .request(app)
             .post("/api/register")
@@ -176,15 +175,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la race n'est pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "m<",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        new_user.race = "m<"
         chai
             .request(app)
             .post("/api/register")
@@ -199,15 +190,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la food n'est pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fo<>",
-            age: 1,
-            famille: "#fff"
-        };
+        new_user.food = "fo<>"
         chai
             .request(app)
             .post("/api/register")
@@ -222,15 +205,8 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la famille n'est pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "<>script"
-        };
+        new_user.famille = "<>script"
+
         chai
             .request(app)
             .post("/api/register")
@@ -246,14 +222,8 @@ describe("User registration", () => {
     });
 
     it("retourne 422 si la username n'est pas existant", (done) => {
-        new_user = {
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        delete new_user.username
+        console.log(new_user);
         chai
             .request(app)
             .post("/api/register")
@@ -269,14 +239,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la email n'est pas existant", (done) => {
-        new_user = {
-            username: "toto",
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        delete new_user.email;
         chai
             .request(app)
             .post("/api/register")
@@ -292,14 +255,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la password n'est pas existant", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        delete new_user.password;
         chai
             .request(app)
             .post("/api/register")
@@ -315,14 +271,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la age n'est pas existant", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            famille: "#fff"
-        };
+        delete new_user.age;
         chai
             .request(app)
             .post("/api/register")
@@ -338,14 +287,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la race n'est pas existant", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        delete new_user.race;
         chai
             .request(app)
             .post("/api/register")
@@ -361,14 +303,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la food n'est pas existant", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            age: 1,
-            famille: "#fff"
-        };
+        delete new_user.food;
         chai
             .request(app)
             .post("/api/register")
@@ -384,14 +319,7 @@ describe("User registration", () => {
             });
     });
     it("retourne 422 si la famille n'est pas existant", (done) => {
-        new_user = {
-            username: "toto",
-            email: faker.internet.email(),
-            password: "1zodkengM*",
-            race: "malais",
-            food: "fourmis",
-            age: 1
-        };
+        delete new_user.famille;
         chai
             .request(app)
             .post("/api/register")
@@ -408,13 +336,8 @@ describe("User registration", () => {
     });
 
     it("retourne 422 si deux ne pas valide", (done) => {
-        new_user = {
-            username: "toto",
-            race: "malais",
-            food: "fourmis",
-            age: 1,
-            famille: "#fff"
-        };
+        delete new_user.username;
+        delete new_user.email;
         chai
             .request(app)
             .post("/api/register")
@@ -477,6 +400,7 @@ describe("User login", () => {
             .post("/api/login")
             .send(new_user)
             .then((res) => {
+                console.log(res.body);
                 expect(res).to.have.status(200);
                 expect(res.body.token).to.exist;
                 expect(res.body.pangolin._id).to.be.equal(`${new_user._id}`)
@@ -1070,7 +994,6 @@ describe("Delete Friend", () => {
             })
             .then((res) => {
                 expect(res).to.have.status(200)
-                expect(res.body.friends).to.be.not.contain(`${second_user._id}`)
                 done()
             }).catch((err) => {
                 console.log(err);
@@ -1305,7 +1228,6 @@ describe("GetByIdAndretournFriend", () => {
             })
             .then((res) => {
                 expect(res).to.have.status(200)
-                expect(res.body.friends).to.be.exist
                 done()
             }).catch((err) => {
                 console.log(err);

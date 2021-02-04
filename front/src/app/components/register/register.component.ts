@@ -14,17 +14,12 @@ import {TooltipPosition} from '@angular/material/tooltip';
   styleUrls: ['./register.component.sass']
 })
 export class RegisterComponent implements OnInit {
+  
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
   form: any = {};
   isFailed: Boolean = false;
-  errorUsername: String;
-  errorEmail: String;
-  errorPassword: String;
-  errorRace: String;
-  errorFood: String;
-  errorAge: String;
-  errorFamille: String;
+  errors: any;
   foods: any = [
     {value: 'termites', viewValue: 'Termites'},
     {value: 'fourmi', viewValue: 'Fourmis'},
@@ -51,6 +46,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.form.isActive = true
     return this.authService.register(this.form)
       .subscribe(
         res => {
@@ -60,48 +56,13 @@ export class RegisterComponent implements OnInit {
           this.router.navigate(["/login"])
         },
         err => {
-          console.log(err);
-
-          let findUsernameErr = err.error.errors.find(e => e.username)
-          let findPasswordErr = err.error.errors.find(e => e.password)
-          let findRaceErr = err.error.errors.find(e => e.race)
-          let findEmailErr = err.error.errors.find(e => e.email)
-          let findFoodErr = err.error.errors.find(e => e.food)
-          let findFamilleErr = err.error.errors.find(e => e.famille)
-          let findAgeErr = err.error.errors.find(e => e.age)
-
-          if (findUsernameErr) {
-            this.errorUsername = findUsernameErr.username
-          }
-          if (findEmailErr) {
-            this.errorEmail = findEmailErr.email
-          }
-          if (findPasswordErr) {
-            this.errorPassword = findPasswordErr.password
-
-          }
-          if (findRaceErr) {
-            this.errorRace = findRaceErr.race
-
-          }
-          if (findFoodErr) {
-            this.errorFood = findFoodErr.food
-
-          }
-          if (findFamilleErr) {
-            this.errorFamille = findFamilleErr.famille
-
-          }
-          if (findAgeErr) {
-            this.errorAge = findAgeErr.age
-
-          }
+          this.isFailed = true         
+          for(let i = 0; i < err.error.errors.length;i++){
+            this.errors = Object.assign(this.errors,err.error.errors[i])
+          }    
+         
         }
       )
-  }
-  
-  redirectConnection() {
-    this.router.navigate['/login']
   }
 
 }

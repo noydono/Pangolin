@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/_services/auth.service';
 import { FriendsService } from 'src/app/_services/friends.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
@@ -9,6 +8,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   styleUrls: ['./friend.component.sass']
 })
 export class FriendComponent implements OnInit {
+  
   pangolins: any = [];
   myProfile: any = [];
   myFriends: any = [];
@@ -45,10 +45,7 @@ export class FriendComponent implements OnInit {
       }
     )
   }
-  background(color) {
-    return "background-color:" + color + ";"
-  }
-
+  
   addFriend(friend) {
     let user = this.TokenStorageService.getProfile()
     this.friendService.addFriend(user._id, friend).subscribe(
@@ -68,14 +65,18 @@ export class FriendComponent implements OnInit {
   getMyFriend(): void {
     this.friendService.getMyFriend(this.myProfile._id).subscribe(
       res => {
-        this.myFriends = res.friends.flat(1)
+        if(res != null){
+          this.myFriends = res.friends.flat(1)
+        }
       }, err => {
         console.log(err);
 
       }
     )
   }
-
+  background(color) {
+    return "background-color:" + color + ";"
+  }
   reloadPage(): void {
     window.location.reload()
   }

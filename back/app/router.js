@@ -5,8 +5,8 @@ const pangolinController = require("./controllers/pangolinController"),
     friendController = require("./controllers/friendController")
 
 const Validator = require("./middleware/pangolinAuthValidator"),
-    loginValidator = require("./middleware/pangolinLoginValidator")
-updateValidator = require("./middleware/pangolinUpdateValidator")
+    loginValidator = require("./middleware/pangolinLoginValidator"),
+    updateValidator = require("./middleware/pangolinUpdateValidator")
 
 
 router.route("/register")
@@ -22,15 +22,11 @@ router.route("/delete/:id")
     .delete(pangolinController.delete);
 
 router.route("/friend")
-    .get(friendController.getAll);
+    .get(friendController.getAll)
 
 router.route("/friend/:id")
-    .get(friendController.getFriend)
-    .put(friendController.deleteFriend)
+    .get(friendController.getMyFriend)
+    .put(friendController.deleteMyFriend)
     .post(friendController.addFriend);
-
-
-
-
 
 module.exports = router

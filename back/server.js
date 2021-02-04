@@ -27,7 +27,7 @@ mongoose.connect(
     }
   }
 );
-// app.use(morgan('tiny'))
+app.use(morgan('tiny'))
 app.use(cors(corsOption))
 app.use(methodOverride('X-HTTP-Method-Override'))
 app.use(bodyParser.urlencoded({ extended: false }));

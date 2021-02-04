@@ -16,13 +16,11 @@ export class AuthService {
     return this.http.post( BaseUrl + "register", user)
   }
 
+
   login(credential): Observable<any>{    
     return this.http.post( BaseUrl + "login", credential )
   }
   update(data,id): Observable<any>{
-    console.log(data);
-    console.log(id);
-    
     return this.http.put( BaseUrl + "update/" + id, data )
   }
 }

@@ -29,18 +29,14 @@
             <!-- Age -->
             <mat-form-field class="card-input-number" appearance="outline">
               <mat-label>Age</mat-label>
-              <mat-error *ngIf="errorAge">
-                {{errorAge}}
-              </mat-error>
+              
               <input [(ngModel)]="form.age" type="number" matInput name="age" [placeholder]="myProfile.age"
                 autocomplete="off">
             </mat-form-field>
             <!-- Food -->
             <mat-form-field appearance="fill">
               <mat-label>Ta nourriture préférées</mat-label>
-              <mat-error *ngIf="errorFood">
-                {{errorFood}}
-              </mat-error>
+              
               <mat-select [(ngModel)]="form.food" name="food">
                 <mat-option *ngFor="let food of foods" [value]="food.value">
                   {{food.viewValue}}
@@ -50,9 +46,7 @@
             <!-- Race -->
             <mat-form-field appearance="fill">
               <mat-label>Ton espèce</mat-label>
-              <mat-error *ngIf="errorRace">
-                {{errorRace}}
-              </mat-error>
+              
               <mat-select [(ngModel)]="form.race" name="race">
                 <mat-option *ngFor="let item of races" [value]="item.value">
                   {{item.viewValue}}
@@ -62,9 +56,7 @@
             <!-- Color -->
             <mat-form-field class="parent-input-color" appearance="outline">
               <mat-label>Ma Couleur préférées</mat-label>
-              <mat-error *ngIf="errorFamille">
-                {{errorFamille}}
-              </mat-error>
+              
               <input [cpPosition]="colorInputPosition"    [value]="form.famille" [style.background]="form.famille" [(colorPicker)]="form.famille"
                 class="input-color" matInput name="famille">
             </mat-form-field>

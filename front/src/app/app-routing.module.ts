@@ -7,6 +7,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileGuard } from './guards/profile.guard';
 import { FriendComponent } from './components/friend/friend.component';
+import { InstantChatComponent } from './components/instant-chat/instant-chat.component';
+import { InviteFriendComponent } from './components/invite-friend/invite-friend.component';
 
 
 
@@ -16,7 +18,10 @@ const routes: Routes = [
   {path:"login", component:LoginComponent,canActivate:[LoginGuard]},
   {path:"register", component:RegisterComponent},
   {path:"profile", component:ProfileComponent,canActivate:[ProfileGuard]},
-  {path:"friend", component:FriendComponent,canActivate:[ProfileGuard]}
+  {path:"friend", component:FriendComponent,canActivate:[ProfileGuard]},
+  {path:"chat", component:InstantChatComponent,canActivate:[ProfileGuard]},
+  {path:"friend/invite", component:InviteFriendComponent,canActivate:[ProfileGuard]}
+
 ];
 
 @NgModule({
