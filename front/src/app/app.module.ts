@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
@@ -39,7 +39,7 @@ import { InstantChatComponent } from './components/instant-chat/instant-chat.com
     FriendComponent,
     NavComponent,
     HomeComponent,
-    InstantChatComponent
+    InstantChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,9 +62,11 @@ import { InstantChatComponent } from './components/instant-chat/instant-chat.com
     MatSnackBarModule,
     MatTabsModule,
     ColorPickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

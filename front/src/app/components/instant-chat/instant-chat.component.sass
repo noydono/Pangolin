@@ -3,21 +3,35 @@
     height: 90%
     display: flex
     flex-direction: column
-    justify-content: center
+    justify-content: flex-start
     align-items: center
 .card
-    width: 32rem
+    margin-top: 2rem
+    width: 42rem
+    height: 50rem
+
 .card-body
     display: flex
     flex-direction: column
     justify-content: center
-    align-items: cente
+    align-items: flex-start
+    background-color: darkgrey
+    border: 1px solid grey
+    border-radius: 2px
+    & .row
+        width: 100%
+        height: 40rem
+    & .message
+        border: 1px solid darkgrey
+        border-radius: 50px !important
+        padding: 0.5rem
+        margin: 0.5rem
 
-.card-actions-button
-    margin-bottom: 1rem
 
 .chat-input-field
-        width: 75%
+        width: 33rem
         margin-left: 0.5rem
+        margin-right: 1rem
         & input
             height: 1.5rem
+        

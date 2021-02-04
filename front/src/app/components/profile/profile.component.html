@@ -59,15 +59,23 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
             <!-- Color -->
             <mat-form-field class="parent-input-color" appearance="outline">
               <mat-label>Ma Couleur préférées</mat-label>
               <mat-error *ngIf="errorFamille">
                 {{errorFamille}}
               </mat-error>
-              <input [cpPosition]="colorInputPosition"    [value]="form.famille" [style.background]="form.famille" [(colorPicker)]="form.famille"
-                class="input-color" matInput name="famille">
+              <input 
+              matInput 
+              [cpPosition]="colorInputPosition"    
+              [value]="form.famille" 
+              [style.background]="form.famille" 
+              [(colorPicker)]="form.famille"
+              class="input-color" 
+              name="famille">
             </mat-form-field>
+
           </mat-card-content>
           <mat-card-actions>
             <button class="card-button" style="margin-bottom: 1rem; margin-left: 1rem;" mat-raised-button

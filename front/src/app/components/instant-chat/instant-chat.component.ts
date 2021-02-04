@@ -8,20 +8,25 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   styleUrls: ['./instant-chat.component.sass']
 })
 export class InstantChatComponent implements OnInit {
-  myProfile: any={};
+  myProfile: any = {};
   title = 'instant-chatting';
   user: String;
   room: String;
+  colorPangolin: String;
   messageText: String;
-  messageArray: Array<{user: String , message: String }> = [];
+  messageArray: Array<{ famille: String, user: String, message: String }> = [];
   constructor(
     private instantChatservice: InstantChatService,
-    private tokenStorageService : TokenStorageService,
-    private render2 : Renderer2
-    ){
+    private tokenStorageService: TokenStorageService,
+    private render2: Renderer2
+  ) {
+    console.log(this.messageArray);
 
     this.instantChatservice.newUserJoined()
-      .subscribe(data => this.messageArray.push(data));
+      .subscribe(res => {
+        this.messageArray.push(res)
+        this.colorPangolin = res.famille
+      });
 
     this.instantChatservice.userLeftRoom()
       .subscribe(data => this.messageArray.push(data));
@@ -31,36 +36,35 @@ export class InstantChatComponent implements OnInit {
 
   }
 
-  ngOnInit(){    
+  ngOnInit() {
     this.getProfile()
     this.join()
-    this.render2.listen( window, "beforeunload", ()=>{
+    this.render2.listen(window, "beforeunload", () => {
       this.leave()
     })
 
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     console.log("couoc");
     this.leave()
   }
-  closeWindow(){
+  closeWindow() {
 
   }
-  getProfile(){    
+  getProfile() {
     this.myProfile = this.tokenStorageService.getProfile()
   }
-  join(){
-      this.instantChatservice.joinRoom({user: this.myProfile.username, room: this.room});
+  join() {
+    this.instantChatservice.joinRoom({ user: this.myProfile.username, famille: this.myProfile.famille, room: this.room });
   }
 
-  leave(){
-    this.instantChatservice.leaveRoom({user: this.myProfile.username, room: this.room});
+  leave() {
+    this.instantChatservice.leaveRoom({ user: this.myProfile.username, room: this.room });
   }
 
-  sendMessage()
-  {
-    this.instantChatservice.sendMessage({user: this.myProfile.username, room: this.room, message: this.messageText});
-    this.messageText=""
-  
+  sendMessage() {
+    this.instantChatservice.sendMessage({ user: this.myProfile.username, room: this.room, message: this.messageText });
+    this.messageText = ""
+
   }
 }

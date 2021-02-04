@@ -9,8 +9,10 @@
       <div class="row">
         <div class="well" style="height:200px; padding:15px;">
             {{messageArray}}
-          <div *ngFor="let item of messageArray">
-            <span><strong>{{item.user}} : </strong> {{item.message}}</span>
+          <div  *ngFor="let item of messageArray">
+            <div class="message" [style.background-color]="colorPangolin">
+              <span><strong>{{item.user}} : </strong> {{item.message}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -27,7 +29,7 @@
         (keyup.enter)="sendMessage()"
         >
       </mat-form-field>
-      <button (click)="sendMessage()" mat-raised-button color="accent">Envoyé</button>
+      <button class=".card-actions-button" (click)="sendMessage()" mat-raised-button color="accent">Envoyé</button>
     </mat-card-actions>
   </mat-card>
 </div>

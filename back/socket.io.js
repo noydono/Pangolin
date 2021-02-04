@@ -19,7 +19,8 @@ io.on('connection', (socket) => {
         socket.join(data.room);
         io.emit('new user joined', {
             user: data.user,
-            message: 'A rejoin le tchat'
+            message: 'A rejoin le tchat',
+            famille : data.famille
         });
 
     });

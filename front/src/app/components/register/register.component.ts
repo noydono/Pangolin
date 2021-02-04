@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/_services/auth.service';
-import {FormControl} from '@angular/forms';
+import {FormControl,Validators,FormBuilder,FormGroup, AbstractControl} from '@angular/forms';
 import {TooltipPosition} from '@angular/material/tooltip';
 
 
@@ -14,17 +13,13 @@ import {TooltipPosition} from '@angular/material/tooltip';
   styleUrls: ['./register.component.sass']
 })
 export class RegisterComponent implements OnInit {
+  
+  colorPickerFormat = 'hex'
+  isFailed : boolean= false;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
-  form: any = {};
-  isFailed: Boolean = false;
-  errorUsername: String;
-  errorEmail: String;
-  errorPassword: String;
-  errorRace: String;
-  errorFood: String;
-  errorAge: String;
-  errorFamille: String;
+  form: FormGroup;
+  errors: any = {}
   foods: any = [
     {value: 'termites', viewValue: 'Termites'},
     {value: 'fourmi', viewValue: 'Fourmis'},
@@ -44,58 +39,49 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
      private router: Router,
-     private snackBar : MatSnackBar
+     private snackBar : MatSnackBar,
+     private formBuilder : FormBuilder
      ){ }
 
   ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      username:[,[this.ValidateField]],
+      email:[,[this.ValidateField]],
+      password:[,[this.ValidateField]],
+      age:[,[this.ValidateField]],
+      race:[,[this.ValidateField]],
+      food:[,[this.ValidateField]],
+      famille:[,[this.ValidateField]]
+    })
+    
   }
 
+  ValidateField(control: AbstractControl): {[key: string]: any} | null  {
+      return { 'fieldInvalid': true };
+  }
+  get f(){
+      console.log("get"); 
+      console.log(this.form.controls["famille"]);
+      return this.form.controls
+  }
+  get coloFormat(): String{
+    return "hex"
+  }
   register() {
-    return this.authService.register(this.form)
+    return this.authService.register(this.form.value)
       .subscribe(
         res => {
-          let snackBarRef = this.snackBar.open('Inscription réussi vous pouvez vous connecter','Undo',{
+          this.snackBar.open('Inscription réussi vous pouvez vous connecter','Undo',{
             duration: 3000
           });
           this.router.navigate(["/login"])
         },
-        err => {
-          console.log(err);
-
-          let findUsernameErr = err.error.errors.find(e => e.username)
-          let findPasswordErr = err.error.errors.find(e => e.password)
-          let findRaceErr = err.error.errors.find(e => e.race)
-          let findEmailErr = err.error.errors.find(e => e.email)
-          let findFoodErr = err.error.errors.find(e => e.food)
-          let findFamilleErr = err.error.errors.find(e => e.famille)
-          let findAgeErr = err.error.errors.find(e => e.age)
-
-          if (findUsernameErr) {
-            this.errorUsername = findUsernameErr.username
-          }
-          if (findEmailErr) {
-            this.errorEmail = findEmailErr.email
-          }
-          if (findPasswordErr) {
-            this.errorPassword = findPasswordErr.password
-
-          }
-          if (findRaceErr) {
-            this.errorRace = findRaceErr.race
-
-          }
-          if (findFoodErr) {
-            this.errorFood = findFoodErr.food
-
-          }
-          if (findFamilleErr) {
-            this.errorFamille = findFamilleErr.famille
-
-          }
-          if (findAgeErr) {
-            this.errorAge = findAgeErr.age
-
-          }
+        err => { 
+          this.isFailed = true         
+          for(let i = 0; i < err.error.errors.length;i++){
+            this.errors = Object.assign(this.errors,err.error.errors[i])
+          }    
+          console.log(this.errors);
         }
       )
   }
