@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
     const dotenv = require("dotenv").config({
         path: '.env.dev'
     })
+    app.use(morgan('tiny'))
 
 } else if (process.env.NODE_ENV === 'test') {
 
@@ -48,7 +49,7 @@ mongoose.connect(
 );
 
 
-app.use(morgan('tiny'))
+
 app.use(cors(corsOption))
 app.use(methodOverride('X-HTTP-Method-Override'))
 app.use(bodyParser.json());

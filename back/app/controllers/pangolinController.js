@@ -19,7 +19,7 @@ module.exports = {
             pangolin.save((err, pangolin_saved) => {
                 /* istanbul ignore if */
                 if (err) {
-                    console.log(err);
+                    // console.log(err);
                 } else {
                     res.status(201).json({
                         _id: pangolin_saved._id,

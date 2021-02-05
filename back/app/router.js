@@ -4,13 +4,12 @@ const express = require('express'),
 const pangolinController = require("./controllers/pangolinController"),
     friendController = require("./controllers/friendController")
 
-const Validator = require("./middleware/pangolinAuthValidator"),
-    loginValidator = require("./middleware/pangolinLoginValidator"),
-    updateValidator = require("./middleware/pangolinUpdateValidator")
-
+const registerValidator = require("./middleware/registerValidator"),
+    loginValidator = require("./middleware/loginValidator"),
+    updateValidator = require("./middleware/updateValidator")
 
 router.route("/register")
-    .post(Validator, pangolinController.register);
+    .post(registerValidator, pangolinController.register);
 
 router.route("/login")
     .post(loginValidator, pangolinController.login);

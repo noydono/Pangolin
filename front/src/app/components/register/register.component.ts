@@ -15,26 +15,6 @@ import {TooltipPosition} from '@angular/material/tooltip';
 })
 export class RegisterComponent implements OnInit {
   
-  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
-  position = new FormControl(this.positionOptions[0]);
-  form: any = {};
-  isFailed: Boolean = false;
-  errors: any;
-  foods: any = [
-    {value: 'termites', viewValue: 'Termites'},
-    {value: 'fourmi', viewValue: 'Fourmis'},
-  ];
-  races: any = [
-    {value: 'indien', viewValue: 'Indien'},
-    {value: 'malais', viewValue: 'Malais'},
-    {value: 'chine', viewValue: 'Chine'},
-    {value: 'philippines', viewValue: 'Philippines'},
-    {value: 'geant', viewValue: 'Géant'},
-    {value: 'cap', viewValue: 'Cap'},
-    {value: 'longuequeue', viewValue: 'Longue queue'},
-    {value: 'petitesecailles', viewValue: 'Petites écailles'},
-  ];
-
 
   constructor(
     private authService: AuthService,
@@ -50,20 +30,38 @@ export class RegisterComponent implements OnInit {
     return this.authService.register(this.form)
       .subscribe(
         res => {
+          this.form={}
           let snackBarRef = this.snackBar.open('Inscription réussi vous pouvez vous connecter','Undo',{
             duration: 3000
           });
           this.router.navigate(["/login"])
         },
         err => {
-          this.isFailed = true         
-          for(let i = 0; i < err.error.errors.length;i++){
+          for(let i = 0; i < err.error.errors.length;i++){            
             this.errors = Object.assign(this.errors,err.error.errors[i])
           }    
-         
+          
         }
       )
   }
-
+ positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+  position = new FormControl(this.positionOptions[0]);
+  form: any = {};
+  isFailed: Boolean = false;
+  errors:any = {};
+  foods: any = [
+    {value: 'termites', viewValue: 'Termites'},
+    {value: 'fourmi', viewValue: 'Fourmis'},
+  ];
+  races: any = [
+    {value: 'indien', viewValue: 'Indien'},
+    {value: 'malais', viewValue: 'Malais'},
+    {value: 'chine', viewValue: 'Chine'},
+    {value: 'philippines', viewValue: 'Philippines'},
+    {value: 'geant', viewValue: 'Géant'},
+    {value: 'cap', viewValue: 'Cap'},
+    {value: 'longuequeue', viewValue: 'Longue queue'},
+    {value: 'petitesecailles', viewValue: 'Petites écailles'},
+  ];
 }
 

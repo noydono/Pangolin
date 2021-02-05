@@ -11,34 +11,15 @@ Selection le theme que vous voulez  et dit oui à la typo et animation =)
 bash setup.bash
 
 ```
-### Modifier .env
-Rajouté dans .env
-et remplacé <db_name>
-```
-PORT = 8080
-MONGOURL = "mongodb://localhost:27017/<db_name>"
-USERSECRET = ILOVEPANGOLIN
-
-```
 
 
 ### Compiles and hot-reloads for development
 npm start dans le dossier back et front
 ```
+pour le front
 npm start
 
+pour le back 
+npm run prod ou npm run dev ou npm run test
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-
-```
-### Test Back
-#### Pour Lancé les test fait attention que .env soit sur une DB de TEST
-Dans le fichier coverage vous pouvez ouvrir index.html pour voir le coverage de chaque fichier
-
-```
-npm test
-
-```

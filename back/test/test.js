@@ -63,13 +63,11 @@ describe("User registration", () => {
     });
 
     it("retourne 201 si l'utilisateur et persisté", (done) => {
-        console.log(new_user);
         chai
             .request(app)
             .post("/api/register")
             .send(new_user)
             .then((res) => {
-                console.log(res.body);
                 expect(res).to.have.status(201);
                 expect(res.body.errors).to.not.exist
                 expect(res.body._id).to.be.exist
@@ -87,7 +85,6 @@ describe("User registration", () => {
             .post("/api/register")
             .send(new__user_invited)
             .then((res) => {
-                console.log(res.body);
                 expect(res).to.have.status(201);
                 expect(res.body.errors).to.not.exist
                 expect(res.body._id).to.be.exist
@@ -403,7 +400,6 @@ describe("User login", () => {
             .post("/api/login")
             .send(new_user)
             .then((res) => {
-                console.log(res.body);
                 expect(res).to.have.status(200);
                 expect(res.body.token).to.exist;
                 expect(res.body.pangolin._id).to.be.equal(`${new_user._id}`)

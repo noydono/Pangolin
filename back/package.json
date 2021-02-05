@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha ",
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha -R nyan ",
     "prod": "NODE_ENV=production nodemon server.js",
     "dev": "NODE_ENV=developpement nodemon server.js",
     "socket": "nodemon socket.io.js"

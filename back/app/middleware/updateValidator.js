@@ -29,9 +29,8 @@ module.exports = (req,res,next) => {
     function raceValidator(race){
       const patternRace = /^([a-zA-Z0-9-_]{3,36})$/;
       if(!race){
-        
       }
-      else if (!race || patternRace.test(race) === false) {
+      else if (patternRace.test(race) === false) {
         errors.push({ race: "Espece non valide" });
         hasErrors = true;
       }
