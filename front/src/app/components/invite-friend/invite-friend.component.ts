@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/_services/auth.service';
 import { FriendsService } from 'src/app/_services/friends.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
@@ -11,60 +13,75 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
     templateUrl: './invite-friend.component.html',
     styleUrls: ['./invite-friend.component.sass']
 })
-export class InviteFriendComponent implements OnInit {
-
-    form: any = {};
-    registerIsFailed: Boolean = false;
-    errors: any;
-    myProfile: any = [];
-
+export class InviteFriendComponent implements OnInit, OnDestroy {
 
     constructor(
         private authService: AuthService,
         private friendService: FriendsService,
         private TokenStorageService: TokenStorageService,
         private router: Router,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private fromBuilder: FormBuilder
     ) { }
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.getMyProfile()
+        this.initformulaire()
+    }
+
+    ngOnDestroy() {
+        if (this.registerSubscription) { this.registerSubscription.unsubscribe() }
+    }
+
+    onSubmit() {
+        this.registerSubscription = this.authService.register(this.formulaire.value)
+            .subscribe(
+                (response) => {
+                    this.addFriendSubscription = this.friendService.addFriend(this.myProfile._id, response).subscribe(
+                        () => {
+                            this.snackBar.open('Inscription réussi il a été rajouter à vos amis', 'Cacher', {
+                                duration: 3000
+                            })
+                            this.router.navigate(["/profile"])
+                        })
+                },
+                (error) => {
+
+                    for (let i = 0; i < error.error.errors.length; i++) {
+                        let responseErr = error.error.errors;
+                        this.errors = Object.assign(this.errors, responseErr[i])
+                        this.formulaire.controls[`${Object.keys(responseErr[i])}`].setErrors({ 'incorrect': true })
+                    }
+
+                }
+            )
+       
     }
 
     getMyProfile(): void {
         this.myProfile = this.TokenStorageService.getProfile()
     }
 
-    register() {
-
-        return this.authService.register(this.form)
-            .subscribe(
-                res => {
-                    this.friendService.addFriend(this.myProfile._id, res).subscribe(
-                        res => {
-
-                            let snackBarRef = this.snackBar.open('Inscription réussi il a été rajouter à vos amis', 'Cacher', {
-                                duration: 3000
-                            })
-                            this.router.navigate(["/profile"])
-
-                        }, err => {
-
-                            this.registerIsFailed = true
-                            for (let i = 0; i < err.error.errors.length; i++) {
-                                this.errors = Object.assign(this.errors, err.error.errors[i])
-                            }
-
-                        })
-                },
-                err => {
-
-                    this.registerIsFailed = true
-                    for (let i = 0; i < err.error.errors.length; i++) {
-                        this.errors = Object.assign(this.errors, err.error.errors[i])
-                    }
-                }
-            )
+    initformulaire() {
+        this.formulaire = this.fromBuilder.group(
+            {
+                username: ["", [Validators.required]],
+                email: ["", [Validators.required, Validators.email]]
+            }
+        )
     }
+
+    // Formulaire
+    formulaire: FormGroup;
+    
+    //Rxjs
+    registerSubscription: Subscription
+    addFriendSubscription: Subscription
+
+    // ERRORS 
+    errors: any = {};
+
+    // BESOIN Externe
+    myProfile: any = [];
 
 }

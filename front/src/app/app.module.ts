@@ -28,8 +28,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ColorPickerModule } from 'ngx-color-picker';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatChipsModule} from '@angular/material/chips';
-import { InstantChatComponent } from './components/instant-chat/instant-chat.component';
 import { InviteFriendComponent } from './components/invite-friend/invite-friend.component';
 
 
@@ -42,7 +40,6 @@ import { InviteFriendComponent } from './components/invite-friend/invite-friend.
     FriendComponent,
     NavComponent,
     HomeComponent,
-    InstantChatComponent,
     InviteFriendComponent
   ],
   imports: [
@@ -67,7 +64,6 @@ import { InviteFriendComponent } from './components/invite-friend/invite-friend.
     MatTabsModule,
     ColorPickerModule,
     MatTooltipModule,
-    MatChipsModule,
     ReactiveFormsModule
   ],
   providers: [],

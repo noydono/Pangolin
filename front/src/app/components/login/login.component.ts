@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
@@ -9,44 +9,56 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.sass']
 })
-export class LoginComponent implements OnInit {
-
-  form: any = {};
-  isFailed: Boolean = false;
-  errorEmail: String;
-  errorPassword: String;
+export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private token: TokenStorageService,
-    private route: Router,
-    private snackBar : MatSnackBar
+    private tokenStorageService: TokenStorageService,
+    private formBuilder: FormBuilder
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.initFormulaire()
   }
-  login() {
-    this.authService.login(this.form).subscribe(
-      res => {
-        this.token.saveToken(res.token);
-        this.token.saveUser(res.pangolin);
-        this.reloadPage()
-        this.route.navigate(['/home'])
-      },
-      error => {
-        console.log(error);
-        
-        for (let i = 0; i < error.error.errors.length; i++) {
-          this.errorPassword = error.error.errors[i].password
-          this.errorEmail = error.error.errors[i].email
-        }
 
-        this.isFailed = true
+  ngOnDestroy() {
+    if (this.loginSubscription) { this.loginSubscription.unsubscribe() }
+  }
+
+  onSubmit() {
+    this.loginSubscription = this.authService.login(this.formulaire.value)
+    .subscribe(
+      (response) => {
+        this.tokenStorageService.saveToken(response.token);
+        this.tokenStorageService.saveUser(response.pangolin);
+        window.location.reload()
+      },
+      (error) => {
+        let responseErr = error.error.errors;
+        for (let i = 0; i < error.error.errors.length; i++) {
+          this.errors = Object.assign(this.errors,responseErr[i] )
+          this.formulaire.controls[`${Object.keys(responseErr[i])}`].setErrors({ 'incorrect': true })
+        }
       }
     )
   }
-  reloadPage(): void {
-    window.location.reload()
+
+  initFormulaire() {
+    this.formulaire = this.formBuilder.group(
+      {
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)]]
+      }
+    )
   }
+
+  // Formulaire
+  formulaire: FormGroup;
+
+  //Rxjs
+  loginSubscription: Subscription;
+
+  // ERRORS 
+  errors: any = {};
 
 }

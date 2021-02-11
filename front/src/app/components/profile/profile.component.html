@@ -1,82 +1,130 @@
-<div class="grid-container">
+<div>
+  	<mat-tab-group dynamicHeight>
 
-  <mat-tab-group    dynamicHeight >
-    <mat-tab   label="Mon Profil">
-      <div class="container">
-        <mat-card class="card">
-          <mat-card-title>
-            Bienvenue sur ton profil
-          </mat-card-title>
-          <mat-card-content class="card-body">
-            <button mat-stroked-button color="primary">Pseudo : <span>{{myProfile.username}}</span></button>
-            <button mat-stroked-button color="primary">Email : <span>{{myProfile.email}}</span></button>
-            <button mat-stroked-button color="primary">Age : <span>{{myProfile.age}}</span></button>
-            <button mat-stroked-button color="primary">Espèce : <span>{{myProfile.race}}</span></button>
-            <button mat-stroked-button color="primary">Nourriture : <span>{{myProfile.food}}</span></button>
-            <button mat-stroked-button [style.background-color]="form.famille">Famille : <span>Color</span></button>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </mat-tab>
-    <mat-tab   label="Modifie ton profil">
-      <div  class="container">
-        <mat-card   class="card">
-          <mat-card-title>
-            Modifie ton profile
-          </mat-card-title>
-          <mat-card-content   class="card-body">
+    	<mat-tab label="Mon Profil">
+			<div class="container">
+				<mat-card class="card">
+				<mat-card-title>
+					Bienvenue sur ton profil
+				</mat-card-title>
+				<mat-card-content class="card-body">
+					<button mat-stroked-button color="primary">Pseudo : <span>{{myProfile.username}}</span></button>
+					<button mat-stroked-button color="primary">Email : <span>{{myProfile.email}}</span></button>
+					<button mat-stroked-button color="primary">Age : <span>{{myProfile.age}}</span></button>
+					<button mat-stroked-button color="primary">Espèce : <span>{{myProfile.race}}</span></button>
+					<button mat-stroked-button color="primary">Nourriture : <span>{{myProfile.food}}</span></button>
+					<button mat-stroked-button [style.background-color]="myProfile.famille">Famille : <span>Color</span></button>
+				</mat-card-content>
+				</mat-card>
+			</div>
+    	</mat-tab>
 
-            <!-- Age -->
-            <mat-form-field class="card-input-number" appearance="outline">
-              <mat-label>Age</mat-label>
-              
-              <input [(ngModel)]="form.age" type="number" matInput name="age" [placeholder]="myProfile.age"
-                autocomplete="off">
-            </mat-form-field>
-            <!-- Food -->
-            <mat-form-field appearance="fill">
-              <mat-label>Ta nourriture préférées</mat-label>
-              
-              <mat-select [(ngModel)]="form.food" name="food">
-                <mat-option *ngFor="let food of foods" [value]="food.value">
-                  {{food.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <!-- Race -->
-            <mat-form-field appearance="fill">
-              <mat-label>Ton espèce</mat-label>
-              
-              <mat-select [(ngModel)]="form.race" name="race">
-                <mat-option *ngFor="let item of races" [value]="item.value">
-                  {{item.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <!-- Color -->
-            <mat-form-field class="parent-input-color" appearance="outline">
-              <mat-label>Ma Couleur préférées</mat-label>
-              
-              <input [cpPosition]="colorInputPosition"    [value]="form.famille" [style.background]="form.famille" [(colorPicker)]="form.famille"
-                class="input-color" matInput name="famille">
-            </mat-form-field>
-          </mat-card-content>
-          <mat-card-actions>
-            <button class="card-button" style="margin-bottom: 1rem; margin-left: 1rem;" mat-raised-button
-              color="primary" (click)="update()">Modifier</button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+    	<mat-tab label="Modifie ton profil">
+      		<div class="container">
+        		<mat-card class="card">
+          			<mat-card-title>
+           	 			Modifie ton profile
+          			</mat-card-title>
+          			<form [formGroup]="formulaire" (ngSubmit)="onSubmit()">
+            			<mat-card-content class="card-body">
 
-    </mat-tab>
-    <mat-tab  label="Mes Amis">
+				<!-- Age -->
+							<mat-form-field class="card-input-number" appearance="outline">
+								<!-- Errors -->
+								<mat-error *ngIf="formulaire.get('age').errors?.required">
+									Ton age est requis
+								  </mat-error>
+								  <mat-error *ngIf="errors.age">
+									{{errors.age}}
+								  </mat-error>
+								  <!--Input -->
+								<mat-label>Age</mat-label>
+								<input formControlName="age" type="number" matInput [placeholder]="myProfile.age" autocomplete="off">
+							</mat-form-field>
+
+				<!-- Food -->
+							<mat-form-field appearance="fill">
+								<!-- Errors -->
+								<mat-error *ngIf="formulaire.get('food').errors?.required">
+									Ta nourriture est requise
+								  </mat-error>
+								  <mat-error *ngIf="errors.food">
+									{{errors.food}}
+								  </mat-error>
+								  <!--Input -->
+								<mat-label>Ta nourriture préférées</mat-label>
+								<mat-select formControlName="food">
+									<mat-option *ngFor="let food of foods" [value]="food.value">
+										{{food.viewValue}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+
+				<!-- Race -->
+							<mat-form-field appearance="fill">
+								<!-- Errors -->
+								<mat-error *ngIf="formulaire.get('race').errors?.required">
+									Ton espèce est requise
+								  </mat-error>
+								  <mat-error *ngIf="errors.race">
+									{{errors.race}}
+								  </mat-error>
+								  <!--Input -->
+								<mat-label>Ton espèce</mat-label>
+								<mat-select formControlName="race">
+									<mat-option *ngFor="let item of races" [value]="item.value">
+										{{item.viewValue}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+
+				<!-- Color -->
+							<mat-form-field class="parent-input-color" appearance="outline">
+								<!-- Errors -->
+								<mat-error *ngIf="formulaire.get('famille').errors?.required">
+									Le famille est requis
+								  </mat-error>
+								  <mat-error *ngIf="errors.famille">
+									{{errors.famille}}
+								  </mat-error>
+								  <!--Input -->
+								<mat-label>Ma Couleur préférées</mat-label>
+								<input 
+									formControlName="famille"
+									type="color"
+									class="input-color"
+									placeholder="Ma Couleur préférées"
+									autocomplete="off" 
+									matInput
+								>
+							</mat-form-field>
+
+            			</mat-card-content>
+
+            			<mat-card-actions>
+              				<button
+							  	[disabled]="this.formulaire.invalid" 
+						  		type="submit"
+						  		class="card-button" 
+						  		style="margin-bottom: 1rem; margin-left: 1rem;" 
+						  		mat-raised-button
+                				color="primary"
+							>Modifier</button>
+            			</mat-card-actions>
+
+          			</form>
+        		</mat-card>
+      		</div>
+    	</mat-tab>
+
+    	<mat-tab label="Mes Amis">
 
       <div class="container">
         <mat-card class="card">
           <mat-card-title>
             Tes amis
           </mat-card-title>
-          <mat-card-content *ngIf="myFriends.length === 0" class="card-body-nofriend">
+          <mat-card-content *ngIf="myFriends.length === 0" class="card-body">
             <h4 class="mt-2 text-center">Tu n'a pas d'amis tu veux en ajouter?</h4>
             <button mat-raised-button color="primary" [routerLink]="['/friend']">Voir les Pangolins</button>
           </mat-card-content>
@@ -92,7 +140,7 @@
           </mat-card-content>
         </mat-card>
       </div>
-    </mat-tab>
-  </mat-tab-group>
+    	</mat-tab>
 
+  	</mat-tab-group>
 </div>

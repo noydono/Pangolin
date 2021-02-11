@@ -8,7 +8,7 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  styleUrls: ['./nav.component.sass']
 })
 export class NavComponent implements OnInit{
 
@@ -26,15 +26,15 @@ export class NavComponent implements OnInit{
     private breakpointObserver: BreakpointObserver,
     private tokenStorageService : TokenStorageService
     ) {}
-      ngOnInit():void{
+
+      ngOnInit(): void{
         this.isLoggedIn = !!this.tokenStorageService.getToken();
-    
     
         if(this.isLoggedIn){
           const user = this.tokenStorageService.getProfile();
           this.username = user.username;
-          this.colorFamille = `background-color:${user.famille} !important;`
         }
+        
       }
 
       logout(): void{

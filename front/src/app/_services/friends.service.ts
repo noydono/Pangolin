@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { $ } from 'protractor';
 import { Observable } from 'rxjs';
 
 const BaseUrl = 'http://localhost:8080/api/friend';
@@ -14,28 +13,27 @@ export class FriendsService {
         private http: HttpClient,
     ) { }
 
-    getPangolin(): Observable<any> {
-        return this.http.get(BaseUrl)
+    getPangolin(){
+        return this.http.get<any>(BaseUrl)
     }
 
-    inviteFriend(user): Observable<any> {
-        return this.http.post(BaseUrl, user)
+    inviteFriend(user){
+        return this.http.post<any>(BaseUrl, user)
     }
 
-    addFriend(userId, friend): Observable<any> {
-        console.log(userId, friend);
-        return this.http.post(BaseUrl + "/" + userId, friend)
+    addFriend(userId, friend){
+        return this.http.post<any>(BaseUrl + "/" + userId, friend)
     }
 
-    removeMyFriend(userId, friend): Observable<any> {
-        return this.http.put(BaseUrl + "/" + userId,
+    removeMyFriend(userId, friend){
+        return this.http.put<any>(BaseUrl + "/" + userId,
             {
                 _id: friend.friend._id,
                 username: friend.friend.username
             }
         )
     }
-    getMyFriend(userId): Observable<any> {
-        return this.http.get(BaseUrl + "/" + userId)
+    getMyFriend(userId){
+        return this.http.get<any>(BaseUrl + "/" + userId)
     }
 }

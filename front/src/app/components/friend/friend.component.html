@@ -5,7 +5,7 @@
     </mat-card-title>
     <mat-card-content class="card-body-friend">
       <ng-container *ngFor="let item of pangolins">
-        <mat-card *ngIf="myProfile._id != item._id" class="card"  [style]="background(item.famille)"
+        <mat-card *ngIf="myProfile._id != item._id" class="card" [style.background-color]="item.famille"  
           style="max-width: 18rem;">
           <mat-card-title class="card-title">
             <h4> {{item.username}}</h4>

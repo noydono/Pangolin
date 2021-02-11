@@ -1,34 +1,58 @@
 <div class="container">
   <mat-card class="card">
-    <mat-card-title>Ce connecter</mat-card-title>
-    <mat-card-subtitle>Ready pour de nouvelles aventure ?</mat-card-subtitle>
-    <mat-card-content class="card-body">
+    <form [formGroup]="formulaire" (ngSubmit)="onSubmit()">
 
-      <!-- Email -->
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <mat-error *ngIf="errorEmail">
-          {{errorEmail}}
-        </mat-error>
-        <input [(ngModel)]="form.email" type="email" matInput placeholder="XxpangolinxX@hotmailcom" name="email"
-          autocomplete="off" required>
-      </mat-form-field>
+      <mat-card-title>Ce connecter</mat-card-title>
+      <mat-card-subtitle>Ready pour de nouvelles aventure ?</mat-card-subtitle>
+      <mat-card-content class="card-body">
 
-      <!-- Password -->
-      <mat-form-field appearance="outline">
-        <mat-label>Mot De Passe</mat-label>
-        <mat-error *ngIf="errorPassword">
-          {{errorPassword}}
-        </mat-error>
-        <input [(ngModel)]="form.password" type="password" matInput placeholder="MonMotDePassDePangolin" name="password"
-          autocomplete="off" required>
-      </mat-form-field>
+        <!-- Email -->
+        <mat-form-field appearance="outline">
+          <!-- ERROR -->
+          <mat-error *ngIf="formulaire.get('email').errors?.required">
+            L'email est requis
+          </mat-error>
+          <mat-error *ngIf="formulaire.get('email').errors?.email">
+            L'email n'est pas valide
+          </mat-error>
+          <mat-error *ngIf="errors.email">
+            {{errors.email}}
+          </mat-error>
+          
+          <!-- INPUT -->
+          <mat-label>Email</mat-label>
+          <input formControlName="email" type="email" required matInput placeholder="XxpangolinxX@hotmailcom"
+            autocomplete="off">
 
-    </mat-card-content>
-    <mat-card-actions>
-      <button class="card-button" style="margin-bottom: 1rem; margin-left: 1rem;" mat-raised-button color="primary"
-        (click)="login()">Connexion</button>
-    </mat-card-actions>
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline">
+
+          <!-- ERROR -->
+          <mat-error *ngIf="formulaire.get('password').errors?.required">
+            Le password est requis
+          </mat-error>
+          <mat-error *ngIf="formulaire.get('password').errors?.pattern">
+            Le mot de passe doit contenir minimum 8 caractère une majuscule 1 chiffre et un caractère spéciaux
+          </mat-error>
+          <mat-error *ngIf="errors.password">
+            {{errors.password}}
+          </mat-error>
+
+          <!-- INPUT -->
+          <mat-label>Mot De Passe</mat-label>
+          <input formControlName="password" type="password" required matInput placeholder="MonMotDePassDePangolin"
+            autocomplete="off">
+        </mat-form-field>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button type="submit" class="card-button" style="margin-bottom: 1rem; margin-left: 1rem;" mat-raised-button
+          color="primary" [disabled]="this.formulaire.invalid">Connexion</button>
+      </mat-card-actions>
+    </form>
+
   </mat-card>
 </div>
-

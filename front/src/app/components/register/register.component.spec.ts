@@ -22,4 +22,10 @@ describe('RegisterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("Formuliare et bien init", (done)=>{
+    let form = component.initFormulaire()
+    console.log(form);
+  })
+
 });

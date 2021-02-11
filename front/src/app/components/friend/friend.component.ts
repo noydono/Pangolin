@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { FriendsService } from 'src/app/_services/friends.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
@@ -7,31 +8,32 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   templateUrl: './friend.component.html',
   styleUrls: ['./friend.component.sass']
 })
-export class FriendComponent implements OnInit {
+export class FriendComponent implements OnInit, OnDestroy {
   
-  pangolins: any = [];
-  myProfile: any = [];
-  myFriends: any = [];
-  friendAdded: String;
   constructor(
     private friendService: FriendsService,
     private TokenStorageService: TokenStorageService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void{
     this.getProfile()
     this.getMyFriend()
     this.getPangolin()
   }
-  ngAfterContentInit(): void {
 
+  ngOnDestroy(): void{
+    if(this.getPangolinSubscription){this.getPangolinSubscription.unsubscribe()}
+    if(this.addFriendSubscription){this.addFriendSubscription.unsubscribe()}
+    if(this.getMyFriendSubscription){this.getMyFriendSubscription.unsubscribe()}
   }
-  getPangolin() {
-    this.friendService.getPangolin().subscribe(
-      res => {
 
-        this.pangolins = res
-        
+  getPangolin(): void{
+    this.getPangolinSubscription = this.friendService.getPangolin()
+    .subscribe(
+      (response) => {
+        // Refacto possible je pense, voir avec pipe map et filter 
+        // si il n'y a pas moyen de filtré directement l'observable
+        this.pangolins = response
         for (let i = 0; i < this.myFriends.length; i++) {         
           for (let e = 0; e < this.pangolins.length; e++) {
             if (this.pangolins[e]._id === this.myFriends[i]._id) {
@@ -39,46 +41,41 @@ export class FriendComponent implements OnInit {
             }
           }
         }
-      },
-      err => {
-        console.log(err)
       }
     )
   }
   
-  addFriend(friend) {
-    let user = this.TokenStorageService.getProfile()
-    this.friendService.addFriend(user._id, friend).subscribe(
-      res => {
-        this.reloadPage();
-      },
-      err => {
-        console.log(err)
+  addFriend(friend): void{
+    this.addFriendSubscription = this.friendService.addFriend(this.myProfile._id, friend).subscribe(
+      (response) => {
+        window.location.reload()
       }
     )
   }
 
-  getProfile(): void {
+  getProfile(): void{
     this.myProfile = this.TokenStorageService.getProfile()
   }
 
-  getMyFriend(): void {
-    this.friendService.getMyFriend(this.myProfile._id).subscribe(
-      res => {
-        if(res != null){
-          this.myFriends = res.friends.flat(1)
+  getMyFriend(): void{
+   this.getMyFriendSubscription = this.friendService.getMyFriend(this.myProfile._id).subscribe(
+    (response) => {
+        if(response != null){
+          this.myFriends = response.friends.flat(1)
         }
-      }, err => {
-        console.log(err);
-
       }
     )
   }
-  background(color) {
-    return "background-color:" + color + ";"
-  }
-  reloadPage(): void {
-    window.location.reload()
-  }
+
+
+  //rxjs
+  getPangolinSubscription: Subscription;
+  addFriendSubscription: Subscription;
+  getMyFriendSubscription: Subscription;
+
+  //BESOIN externe
+  pangolins: any = [];
+  myProfile: any = [];
+  myFriends: any = [];
 
 }

@@ -96,7 +96,7 @@ pangolinSchema.statics.findByCredentials = async (email, password) => {
     const isPasswordMatch = await bcrypt.compare(password, pangolin.password);
     if (isPasswordMatch === false) {
         errors.push({
-            password: "Password doesn't match"
+            password: "Le password n'est pas correct"
         });
         return {
             hasErrors: true,

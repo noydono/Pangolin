@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/_services/auth.service';
-import {FormControl} from '@angular/forms';
-import {TooltipPosition} from '@angular/material/tooltip';
-
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 
 @Component({
@@ -13,55 +12,81 @@ import {TooltipPosition} from '@angular/material/tooltip';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.sass']
 })
-export class RegisterComponent implements OnInit {
-  
+export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-     private router: Router,
-     private snackBar : MatSnackBar
-     ){ }
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private formBuilder: FormBuilder
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.initFormulaire()
   }
 
-  register() {
-    this.form.isActive = true
-    return this.authService.register(this.form)
+  ngOnDestroy() {
+    if (this.registerSubscription) { this.registerSubscription.unsubscribe() }
+  }
+
+  onSubmit() {
+    this.registerSubscription = this.authService.register(this.formulaire.value)
       .subscribe(
-        res => {
-          this.form={}
-          let snackBarRef = this.snackBar.open('Inscription réussi vous pouvez vous connecter','Undo',{
+        (response) => {
+           this.snackBar.open('Inscription réussi vous pouvez vous connecter', 'Undo', {
             duration: 3000
           });
           this.router.navigate(["/login"])
         },
-        err => {
-          for(let i = 0; i < err.error.errors.length;i++){            
-            this.errors = Object.assign(this.errors,err.error.errors[i])
-          }    
-          
+        (error) => {
+          let responseErr = error.error.errors;
+          for (let i = 0; i < error.error.errors.length; i++) {
+            this.errors = Object.assign(this.errors,responseErr[i] )
+            this.formulaire.controls[`${Object.keys(responseErr[i])}`].setErrors({ 'incorrect': true })
+          }
         }
       )
   }
- positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+
+  initFormulaire() {
+    this.formulaire = this.formBuilder.group(
+      {
+        username: ["", [Validators.required]],
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)]],
+        age: [, [Validators.required]],
+        food: ["", [Validators.required]],
+        race: ["", [Validators.required]],
+        famille: ["", [Validators.required]],
+      }
+    )
+  }
+
+  // Formulaire
+  formulaire: FormGroup;
+  
+  //Rxjs
+  registerSubscription: Subscription;
+
+  // ERRORS
+  errors: any = {};
+
+  // STYLE Form
+  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
-  form: any = {};
-  isFailed: Boolean = false;
-  errors:any = {};
   foods: any = [
-    {value: 'termites', viewValue: 'Termites'},
-    {value: 'fourmi', viewValue: 'Fourmis'},
+    { value: 'termites', viewValue: 'Termites' },
+    { value: 'fourmi', viewValue: 'Fourmis' },
   ];
   races: any = [
-    {value: 'indien', viewValue: 'Indien'},
-    {value: 'malais', viewValue: 'Malais'},
-    {value: 'chine', viewValue: 'Chine'},
-    {value: 'philippines', viewValue: 'Philippines'},
-    {value: 'geant', viewValue: 'Géant'},
-    {value: 'cap', viewValue: 'Cap'},
-    {value: 'longuequeue', viewValue: 'Longue queue'},
-    {value: 'petitesecailles', viewValue: 'Petites écailles'},
+    { value: 'indien', viewValue: 'Indien' },
+    { value: 'malais', viewValue: 'Malais' },
+    { value: 'chine', viewValue: 'Chine' },
+    { value: 'philippines', viewValue: 'Philippines' },
+    { value: 'geant', viewValue: 'Géant' },
+    { value: 'cap', viewValue: 'Cap' },
+    { value: 'longuequeue', viewValue: 'Longue queue' },
+    { value: 'petitesecailles', viewValue: 'Petites écailles' },
   ];
 }
 

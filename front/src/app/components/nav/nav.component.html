@@ -7,7 +7,6 @@
     <mat-nav-list>
       <a mat-list-item  class="nav-link" [routerLink]="['/home']"   routerLinkActive="active">Home</a>          
       <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/profile']"   routerLinkActive="active">Profile</a>          
-      <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/chat']" routerLinkActive="active" >Chat</a>
       <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/friend/invite']" routerLinkActive="active" >Inviter un amis</a>
       <a mat-list-item *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/register']" routerLinkActive="active" >S'inscrire</a>
       <a mat-list-item *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/friend']" routerLinkActive="active" >Pangolins</a>
