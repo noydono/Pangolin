@@ -7,7 +7,7 @@ const express = require("express"),
     ROUTER = require("./app/router.js"),
     cors = require("cors"),
     corsOption = {
-        origin: "http://localhost:4200"
+        origin: "http://localhost:9876"
     }
 
     /* istanbul ignore next */
